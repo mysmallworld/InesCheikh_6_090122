@@ -37,17 +37,20 @@ exports.modifySauces = (req, res, next) => {
             ...JSON.parse(req.body.sauce),
             imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
           } : { ...req.body };
+          Sauces.findOne({ _id: req.params.id})
+          .then(sauce => {
+              const filename = sauce.imageUrl.split('/images/')[1];
+              fs.unlink(`images/${filename}`, () => { 
         Sauces.updateOne({ _id: req.params.id }, { ...saucesObject, _id: req.params.id })
           .then(() => res.status(201).json({ message: 'Sauce modifiée !' }))
-          .catch(error => res.status(400).json({ message: error }));
-      }
+          .catch(error => res.status(400).json({ message: error }))
+      });
+    }).catch(error => res.status(500).json({ message: error }))
+  }
       else {
-        res.status(403).json({ message: "Seul l'utilisateur qui a créé la sauce peut la modifier" })
-          .catch((error) => res.status(403).json({ message: error }));
-      }
-    }).catch(error => {
-      res.status(500).json({ message: error });
-    })
+        res.status(403).json({ message : "Seul l'utilisateur qui a créé la sauce peut la modifier !"})
+        .catch((error) => res.status(403).json({ message: error }));
+  }})
 };
 
 //Fonction qui permet de supprimer la sauce avec l'_id fourni
