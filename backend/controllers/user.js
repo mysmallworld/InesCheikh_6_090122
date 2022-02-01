@@ -11,7 +11,6 @@ const result = dotenv.config();
 
 //Fonction d'enregistrement de nouveaux utilisateurs
 exports.signup = (req, res, next) => {
-
   //Chiffrer l'email avant de l'envoyer dans la base de donnée
   const emailCryptoJs = cryptojs.HmacSHA512(req.body.email, `${process.env.CRYPTOJS_RANDOM_SECRET_KEY}`).toString(cryptojs.enc.Base64);
 

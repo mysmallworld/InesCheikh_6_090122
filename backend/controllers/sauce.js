@@ -8,10 +8,7 @@ const result = dotenv.config();
 
 //Fonction qui permet d'enregistrer une nouvelle sauce
 exports.createSauces = (req, res, next) => {
-  //console.log(req.body);
-  //console.log(req.file);
   const saucesObject = JSON.parse(req.body.sauce);
-
   delete saucesObject._id;
   const sauces = new Sauces({
     ...saucesObject,
@@ -34,10 +31,10 @@ exports.modifySauces = (req, res, next) => {
   Sauces.findOne({ _id: req.params.id })
     .then(sauce => {
       if (sauce.userId == userId) {
-        // utilisateur qui a crée la sauce 
+        // utilisateur qui a créé la sauce 
         const saucesObject = req.file ?
           {
-            ...JSON.parse(req.body.sauces),
+            ...JSON.parse(req.body.sauce),
             imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
           } : { ...req.body };
         Sauces.updateOne({ _id: req.params.id }, { ...saucesObject, _id: req.params.id })
@@ -83,7 +80,7 @@ exports.getOneSauces = (req, res, next) => {
     .catch(error => res.status(404).json({ message: error }));
 };
 
-//Fonction de renvoie un tableau de toutes les sauces de la base de données
+//Fonction de renvoie d'un tableau de toutes les sauces présentes dans la base de données
 exports.getAllSauces = (req, res, next) => {
   Sauces.find()
     .then(sauces => res.status(200).json(sauces))

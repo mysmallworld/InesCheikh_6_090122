@@ -41,7 +41,7 @@ const errorHandler = error => {
     }
   };
 
-//Prend en argument la fonction qui sera appelé à chaque requête reçu par le serveur
+//Prend en argument la fonction qui sera appelée à chaque requête reçue par le serveur
 const server = http.createServer(app);
 
 server.on('error', errorHandler);
